@@ -4,8 +4,8 @@ class CameraService {
   // Singleton
   static final CameraService _instance = CameraService._internal();
   // Process 1 of each 37 frames
-  static const int frameProcessorInterval = 11;
-    static const int frameProcessorIntervalAccessPoint = 17;
+  static const int frameProcessorInterval = 37;
+    static const int frameProcessorIntervalAccessPoint = 37;
 
   List<CameraDescription>? _cameras;
   CameraController? _controller;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kbox/config/config.dart';
+import 'package:kbox/util/numbers/numbers_helper.dart';
 import 'package:kbox/util/view_docs/read_pdf.dart';
 
 class ConfirmLogoutModalWidget extends StatelessWidget {
@@ -43,7 +44,7 @@ class ConfirmLogoutModalWidget extends StatelessWidget {
             const SizedBox(height: 20.0),
 
             _buildInfoRow("Dirección:", address),
-            _buildInfoRow("Costo:", "\$${cost.toStringAsFixed(2)}"),
+            _buildInfoRow("Costo:", "\$${NumbersHelper.formatDouble(cost)}"),
             _buildInfoRow("País:", country),
             _buildInfoRow("Fecha de compra:", buyDate),
             _buildInfoRow("Documentos:", docs),

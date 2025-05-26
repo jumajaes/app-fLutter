@@ -14,7 +14,7 @@ class FaceRecognitionService {
   static final FaceRecognitionService _instance =
       FaceRecognitionService._internal();
   // The difference between face embeddings must be <= 0.8 to consider them the same person
-  static const double thresholdDistance = 0.6;
+  static const double thresholdDistance = 0.8;
   late Interpreter _interpreter;
   static const int _width = 112;
   static const int _height = 112;

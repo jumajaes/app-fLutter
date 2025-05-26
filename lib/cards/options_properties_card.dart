@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kbox/config/config.dart';
+import 'package:kbox/util/numbers/numbers_helper.dart';
 
 class OptionsPropertiesCard extends StatefulWidget {
   final String tittle;
@@ -39,7 +40,7 @@ class _OptionsPropertiesCardState extends State<OptionsPropertiesCard> {
         vertical: 6,
       ),
       child: SizedBox(
-        height: 80, // Fijamos altura para uniformidad
+        height: 80,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: ColorsApp.darkGray,
@@ -83,12 +84,12 @@ class _OptionsPropertiesCardState extends State<OptionsPropertiesCard> {
                 children: [
                   Text(
                     'Total',
-                    style: TextStyle(fontSize: 13, color: ColorsApp.primary),
+                    style: TextStyle(fontSize: 18, color: ColorsApp.primary),
                   ),
                   Text(
-                    "${widget.total}",
+                    NumbersHelper.formatDouble(widget.total),
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: ColorsApp.primary,
                     ),

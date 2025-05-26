@@ -13,7 +13,10 @@ class PageLoadingWithIcon extends StatelessWidget {
           CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(ColorsApp.primary),
           ),
-          Icon(Icons.admin_panel_settings_sharp, size: 300, color: ColorsApp.darkGray,),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Icon(Icons.admin_panel_settings_sharp, size: 300, color: ColorsApp.darkGray,),
+          ),
         ],
       ),
     );

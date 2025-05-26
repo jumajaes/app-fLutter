@@ -19,6 +19,7 @@ class GoogleMapWidget extends StatefulWidget {
 class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   final LatLng _center = const LatLng(6.2442, -75.5812);
   bool _isLoading = true;
+  String googleMapId = "";
 
   @override
   void initState() {
@@ -28,13 +29,13 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
 
   _verifyConexion() async {
     bool hasConexion = await isInternetAvailable();
-    if (hasConexion) {
+    if (hasConexion & _verifyMapId()) {
       setState(() {
         _isLoading = false;
       });
     } else {
       _showValidationMessage(
-        "Lo siento, verifica tu conexion de internet.",
+        _verifyMapId() ? "Lo siento, verifica tu conexion de internet" : "Mapa solo disponible para Android e iOS",
         ColorsApp.lightOrange,
         3,
       );
@@ -58,6 +59,15 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
       backgroundColor: backgroundColor,
       duration: 8,
     );
+  }
+
+  bool _verifyMapId(){
+    String mapId = "";
+    mapId = Platform.isAndroid ? "394a7446bbfdadcc2c38b828" : "394a7446bbfdadccfb49292f";
+    setState(() {
+      googleMapId = mapId;
+    });
+    return mapId.isNotEmpty;
   }
 
   Future<bool> isInternetAvailable() async {
@@ -87,7 +97,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
                   zoom: 0.0,
                 ),
                 mapType: MapType.normal,
-                cloudMapId: "394a7446bbfdadcc2c38b828",
+                cloudMapId: googleMapId,
                 markers: {
                   // Sao Paulo
                   Marker(

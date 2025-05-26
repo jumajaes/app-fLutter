@@ -30,15 +30,30 @@ class _HeritageState extends State<Heritage> {
     );
   }
 
-  void _stopReload() async {
-    Future.delayed(
-      Duration(seconds: 1),
-      () => {
-        setState(() {
-          _isReload = false;
-        }),
-      },
-    );
+  _stopReload(ScrollNotification scrollNotification) {
+    double realPosition = scrollNotification.metrics.pixels;
+    double topPosition = scrollNotification.metrics.minScrollExtent;
+
+    bool hasChanged = scrollNotification is ScrollUpdateNotification;
+    bool isTopPosition = realPosition == topPosition;
+
+    bool scrollPpal = scrollNotification.depth == 0;
+
+    if (isTopPosition && hasChanged && scrollPpal) {
+      setState(() {
+        _isReload = true;
+      });
+      Future.delayed(
+        Duration(seconds: 1),
+        () => {
+          setState(() {
+            _isReload = false;
+          }),
+        },
+      );
+    }
+
+    return false;
   }
 
   @override
@@ -81,25 +96,21 @@ class _HeritageState extends State<Heritage> {
                             ),
                           ),
                           SizedBox(
-                            height: _screenSize.height * 0.62,
+                            height: _screenSize.height * 0.65,
                             child: NotificationListener<ScrollNotification>(
                               onNotification: (scrollNotification) {
-                                setState(() {
-                                  _isReload = true;
-                                });
-                                _stopReload();
-                                return false;
+                                return _stopReload(scrollNotification);
                               },
                               child: SingleChildScrollView(
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(5.0),
                                   child: Column(
-                                    spacing: 15,
+                                    spacing: 12,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                        CrossAxisAlignment.stretch,
                                     children: _optionsProperties(),
                                   ),
                                 ),
@@ -128,7 +139,7 @@ class _HeritageState extends State<Heritage> {
       subTittle: "Informacion de tus corporativa",
       icon: Icons.work_outline_rounded,
       onPressed: () async => {},
-      total: 0,
+      total: 250000.00,
     );
 
     Widget patrimonio3 = OptionsPropertiesCard(
@@ -136,7 +147,7 @@ class _HeritageState extends State<Heritage> {
       subTittle: "Mira todas tus alajas",
       icon: Icons.diamond_outlined,
       onPressed: () async => {},
-      total: 0,
+      total: 250000.00,
     );
 
     Widget patrimonio4 = OptionsPropertiesCard(
@@ -144,8 +155,17 @@ class _HeritageState extends State<Heritage> {
       subTittle: "Obras artisticas",
       icon: Icons.burst_mode_outlined,
       onPressed: () async => {},
-      total: 0,
+      total: 400000.00,
     );
-    return [patrimonio, patrimonio2, patrimonio3, patrimonio4];
+
+    Widget patrimonioTotal = OptionsPropertiesCard(
+      tittle: "Total",
+      subTittle: "Valor de todo tu patrimonio",
+      icon: Icons.paid_outlined,
+      onPressed: () async => {},
+      total: 7000000.00,
+    );
+
+    return [patrimonio, patrimonio2, patrimonio3, patrimonio4, patrimonioTotal];
   }
 }
