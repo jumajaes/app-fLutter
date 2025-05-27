@@ -19,7 +19,7 @@ class HttpService {
   _calculateUrls() {
     _urlBase = "https://api.openai.com/v1/chat/completions";
     _apiAuth =
-        "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";
+        "";
   }
 
   _getHeaders() {
