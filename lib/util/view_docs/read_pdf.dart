@@ -22,7 +22,7 @@ class ReadPdf extends StatelessWidget {
         }
 
         return SizedBox(
-          height: 400, // ajusta según el diseño de tu modal
+          height: 400, 
           child: PDFView(
             filePath: snapshot.data!,
             enableSwipe: true,

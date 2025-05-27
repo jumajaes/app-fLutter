@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kbox/map/google_map_widget.dart';
+import 'package:kbox/services/speech_to_text/speech_to_text.service.dart';
 import 'package:kbox/src/home.dart';
 import 'package:kbox/src/pages/heritage.dart';
 
@@ -11,5 +12,6 @@ class AppRoutes {
     '/home': (_) => const Home(),
     '/properties': (_) => const Heritage(),
     '/map': (_) => const GoogleMapWidget(),
+    '/stt': (_) => const SpeechToTextService()
   };
 }

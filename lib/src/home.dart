@@ -160,13 +160,13 @@ class _HomeState extends State<Home> {
       onPressed: () => {},
     );
 
-    Widget assetManagement = OptionsHomeCard(
-      tittle: "Patrimonio",
-      subTittle: "Revisa tus bienes",
-      icon: Icons.home_work_outlined,
-      onPressed: () => {},
+     Widget commands = OptionsHomeCard(
+      tittle: "Comandos",
+      subTittle: "Ejecuta comandos de voz",
+      icon: Icons.mic_none_sharp,
+      onPressed: () => {Navigator.of(context).pushNamed("/stt")},
     );
 
-    return [heritage, team, keys, assetManagement];
+    return [heritage, team, keys, commands];
   }
 }
