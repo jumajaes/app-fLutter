@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:kbox/layouts/main.layout.dart';
 import 'package:kbox/services/http/http.service.dart';
@@ -17,7 +16,7 @@ class SpeechToTextService extends StatefulWidget {
 
 class _SpeechToTextServiceState extends State<SpeechToTextService> {
   late stt.SpeechToText _speech;
-  bool _isListening = false; // Estado de la escucha
+  bool _isListening = false;
   List<String> _text = [];
   String _textStr = "";
 
@@ -37,7 +36,7 @@ class _SpeechToTextServiceState extends State<SpeechToTextService> {
       _isInitialized = available;
       _isLoading = false;
     });
-
+    print("Speech-to-Text initialized: $_isInitialized");
     if (!_isInitialized) _goToPorpertiesPage();
   }
 
@@ -48,23 +47,17 @@ class _SpeechToTextServiceState extends State<SpeechToTextService> {
       _speech.listen(
         onResult: (result) {
           silenceTimer?.cancel();
-
+          print("Resultado: ${result.recognizedWords}");
           setState(() {
             _textStr = result.recognizedWords;
-            _isLoading = true;
+            //_isLoading = true;
           });
 
           silenceTimer = Timer(Duration(milliseconds: 1500), () {
             _stopListening();
-            _text.add(_textStr);
-            if (_text.isEmpty) {
-              _sendAsk("Hola");
-            } else if (_text.length == 1) {
-              _sendAsk(_text[_text.length - 1]);
-            } else if (_text.length > 1) {
-              String message = _text.join("/#%#/");
-              _sendAsk(message);
-            }
+            _textStr.isEmpty ? _text.add("hola") : _text.add(_textStr);
+            String message = _text.join("/#%#/");
+            _sendAsk(message);
           });
         },
       );
@@ -95,6 +88,7 @@ class _SpeechToTextServiceState extends State<SpeechToTextService> {
     Map<String, dynamic> response = await HttpService().sendAskToChatGpt(
       message,
     );
+    //Map<String, dynamic> response = await HttpService().sendAskToChat(message);
     if (response.containsKey("error")) {
       _goToPorpertiesPage();
     } else {
@@ -114,9 +108,11 @@ class _SpeechToTextServiceState extends State<SpeechToTextService> {
           return;
         } else {
           print("No se pudo extraer un JSON válido.");
-          response = await HttpService().sendAskToChatGpt(
+          _text.add(
             "Dame de nuevo el json, ya que, al parecer hay un error en la estructura.",
           );
+          response = await HttpService().sendAskToChatGpt(_text.join("/#%#/"));
+          //response = await HttpService().sendAskToChat(_text.join("/#%#/"));
           Map<String, dynamic>? json = extraerYDecodificarJson(
             response["choices"][0]["message"]["content"],
           );
@@ -130,9 +126,7 @@ class _SpeechToTextServiceState extends State<SpeechToTextService> {
             return;
           } else {
             setState(() {
-              _text = [
-                "Intentemos nuevamente, parece que hubo un error al procesar el JSON.",
-              ];
+              _text = ["Intentemos nuevamente, hubo un error."];
               _isLoading = false;
             });
             return;
@@ -201,8 +195,14 @@ class _SpeechToTextServiceState extends State<SpeechToTextService> {
                                     style: TextStyle(
                                       fontSize:
                                           _text[_text.length - 1].length < 300
-                                              ? 16
-                                              : _text[_text.length - 1].length < 400 ? 14 : _text[_text.length - 1].length > 650 ? 8 : 12,
+                                              ? 20
+                                              : _text[_text.length - 1].length <
+                                                  400
+                                              ? 15
+                                              : _text[_text.length - 1].length >
+                                                  650
+                                              ? 9
+                                              : 12,
                                       fontWeight: FontWeight.bold,
                                     ),
                                     textAlign: TextAlign.center,
