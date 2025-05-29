@@ -45,12 +45,13 @@ class _SpeechToTextServiceState extends State<SpeechToTextService> {
       _textStr = "";
       Timer? silenceTimer;
       _speech.listen(
+        localeId: "es-CO",
         onResult: (result) {
           silenceTimer?.cancel();
           print("Resultado: ${result.recognizedWords}");
           setState(() {
             _textStr = result.recognizedWords;
-            //_isLoading = true;
+            //_isLoading = true;//
           });
 
           silenceTimer = Timer(Duration(milliseconds: 1500), () {
@@ -85,9 +86,15 @@ class _SpeechToTextServiceState extends State<SpeechToTextService> {
   }
 
   void _sendAsk(String message) async {
-    Map<String, dynamic> response = await HttpService().sendAskToChatGpt(
+    //## ### iastudio Google
+    Map<String, dynamic> response = await HttpService().sendAskToChatGoogle(
       message,
     );
+    //## ### CHAT GPT openai
+    // Map<String, dynamic> response = await HttpService().sendAskToChatGpt(
+    //   message,
+    // );
+    //## ### CHAT LOCAL
     //Map<String, dynamic> response = await HttpService().sendAskToChat(message);
     if (response.containsKey("error")) {
       _goToPorpertiesPage();
@@ -111,7 +118,13 @@ class _SpeechToTextServiceState extends State<SpeechToTextService> {
           _text.add(
             "Dame de nuevo el json, ya que, al parecer hay un error en la estructura.",
           );
-          response = await HttpService().sendAskToChatGpt(_text.join("/#%#/"));
+          //## ### iastudio Google
+          response = await HttpService().sendAskToChatGoogle(
+            _text.join("/#%#/"),
+          );
+          //## ### CHAT GPT openai
+          // response = await HttpService().sendAskToChatGpt(_text.join("/#%#/"));
+          //## ### CHAT LOCAL
           //response = await HttpService().sendAskToChat(_text.join("/#%#/"));
           Map<String, dynamic>? json = extraerYDecodificarJson(
             response["choices"][0]["message"]["content"],
